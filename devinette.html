@@ -1,218 +1,290 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Devinette - Déverrouillage</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-      padding: 20px;
-      text-align: center;
-      overflow-x: hidden;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Devinette de Noël</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(#0b1d3a, #15426b);
+  color: white;
+  text-align: center;
+  padding: 40px 20px;
+  overflow-x: hidden;
+}
 
-    .box {
-      background: white;
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-      width: 100%;
-      max-width: 400px;
-      position: relative;
-      z-index: 1;
-    }
+.container {
+  max-width: 400px;
+  margin: auto;
+  background: rgba(255,255,255,0.1);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 0 15px rgba(255,255,255,0.3);
+  backdrop-filter: blur(6px);
+}
 
-    input {
-      width: 100%;
-      padding: 10px;
-      margin-top: 15px;
-      border-radius: 8px;
-      border: 1px solid #aaa;
-      font-size: 16px;
-    }
+.images-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
 
-    button {
-      margin-top: 15px;
-      width: 100%;
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 8px;
-      border: none;
-      background: #4CAF50;
-      color: white;
-      cursor: pointer;
-    }
+.images-row img {
+  width: 45%;
+  border-radius: 10px;
+}
 
-    button:hover {
-      background: #45a049;
-    }
+p.text-before {
+  margin: 15px 0;
+  font-size: 16px;
+}
 
-    #secretContent {
-      display: none;
-      margin-top: 20px;
-      padding: 20px;
-      background: #e8ffe8;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      position: relative;
-      z-index: 2;
-    }
+input {
+  width: 80%;
+  padding: 10px;
+  margin: 15px 0;
+  border-radius: 10px;
+  border: none;
+  font-size: 18px;
+  text-align: center;
+}
 
-    .images-cote-a-cote {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      margin-bottom: 15px;
-      flex-wrap: wrap;
-    }
+.btn-zone {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+  align-items: center;
+}
 
-    .images-cote-a-cote img {
-      width: 40%;
-      border-radius: 10px;
-    }
+button {
+  padding: 12px 18px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.2s;
+  height: 44px;
+}
 
-    @media (max-width: 350px) {
-      .images-cote-a-cote img {
-        width: 45%;
-      }
-    }
+#unlockBtn {
+  background: #2ecc71;
+  color: white;
+  font-weight: bold;
+  flex: 1;
+}
 
-    .confetti {
-      position: fixed;
-      width: 10px;
-      height: 10px;
-      background-color: red;
-      top: -10px;
-      z-index: 9999;
-      pointer-events: none;
-      opacity: 0.9;
-      border-radius: 50%;
-      animation-name: fall;
-      animation-duration: 3s;
-      animation-timing-function: linear;
-    }
+#unlockBtn:hover { transform: scale(1.05); background: #27ae60; }
 
-    .snowflake {
-      position: fixed;
-      top: -10px;
-      color: #4DA6FF;
-      font-size: 18px;
-      z-index: 9999;
-      pointer-events: none;
-      opacity: 0.8;
-      animation-name: snowFall;
-      animation-timing-function: linear;
-    }
+#helpBtn {
+  background: #3498db;
+  color: white;
+  font-size: 18px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  animation: pulse 1.8s infinite;
+}
 
-    .santa {
-      position: fixed;
-      top: 50px;
-      left: -200px;
-      width: 150px;
-      z-index: 9999;
-      pointer-events: none;
-      animation-name: flySanta;
-      animation-duration: 6s;
-      animation-timing-function: linear;
-      transform: scaleX(-1);
-    }
+@keyframes pulse {
+  0% { transform: scale(1); box-shadow: 0 0 5px #fff; }
+  50% { transform: scale(1.15); box-shadow: 0 0 18px #4aa3ff; }
+  100% { transform: scale(1); box-shadow: 0 0 5px #fff; }
+}
 
-    @keyframes fall {
-      0% { transform: translateY(0) rotate(0deg); }
-      100% { transform: translateY(100vh) rotate(360deg); }
-    }
+#tooltip {
+  display: none;
+  position: absolute;
+  background: #2196F3;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  animation: fadeIn 0.3s ease;
+  white-space: nowrap;
+  bottom: 55px;
+  right: 50%;
+  transform: translateX(50%);
+  z-index: 999;
+}
 
-    @keyframes snowFall {
-      0% { transform: translateY(0) translateX(0); }
-      100% { transform: translateY(100vh) translateX(20px); }
-    }
+#tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  right: 50%;
+  transform: translateX(50%);
+  border-width: 8px;
+  border-style: solid;
+  border-color: #2196F3 transparent transparent transparent;
+}
 
-    @keyframes flySanta {
-      0% { left: -200px; }
-      100% { left: 100vw; }
-    }
-  </style>
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95) translateX(50%); }
+  to { opacity: 1; transform: scale(1) translateX(50%); }
+}
+
+#secretContent {
+  display: none;
+  margin-top: 20px;
+  padding: 20px;
+  background: #e8ffe8;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  color: black;
+}
+
+#santa {
+  position: fixed;
+  top: 30%;
+  left: -300px;
+  width: 250px;
+  transform: scaleX(-1);
+  display: none;
+  z-index: 900;
+}
+
+@keyframes santaRide {
+  0% { left: -300px; }
+  50% { top: 15%; }
+  100% { left: 110%; }
+}
+
+.snowflake {
+  position: fixed;
+  top: -10px;
+  color: #6ecbff;
+  user-select: none;
+  animation: fall linear infinite;
+  z-index: 1;
+}
+
+@keyframes fall {
+  0% { transform: translateY(0) rotate(0); }
+  100% { transform: translateY(110vh) rotate(360deg); }
+}
+
+.confetti {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0.9;
+  z-index: 999;
+  animation-name: fallConfetti;
+  animation-timing-function: linear;
+}
+
+@keyframes fallConfetti {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(100vh) rotate(360deg); }
+}
+</style>
 </head>
 <body>
-  <div class="box">
-    <h2>🔍 Devinette</h2>
 
-    <div class="images-cote-a-cote">
-      <img src="https://media.istockphoto.com/id/1366721954/fr/photo/plumes-molles-et-blanches-tombant-dans-lair-plume-de-cygne-sur-fond-noir.jpg?s=612x612&w=0&k=20&c=MUkuG4bZYk7N-7iGcKYsubx4fGbFfktaWb1XYeM4QXk=" alt="Main tendue" />
-      <img src="https://as1.ftcdn.net/jpg/00/25/60/06/1000_F_25600662_fkHTkhsQ6eppLHGF7yvZVhTccwH8Bq4g.webp" alt="Plume" />
-    </div>
+<h1>🎄 Devinette de Noël 🎄</h1>
 
-    <strong>Un seul mot</strong> pour décrire ce que font ces deux images...<br><br>
-    <em>Quel est ce mot ?</em>
+<div class="container">
+  <div class="images-row">
+    <img src="https://media.istockphoto.com/id/1366721954/fr/photo/plumes-molles-et-blanches-tombant-dans-lair-plume-de-cygne-sur-fond-noir.jpg?s=612x612&w=0&k=20&c=MUkuG4bZYk7N-7iGcKYsubx4fGbFfktaWb1XYeM4QXk=" alt="Plume 1">
+    <img src="https://as1.ftcdn.net/jpg/00/25/60/06/1000_F_25600662_fkHTkhsQ6eppLHGF7yvZVhTccwH8Bq4g.webp" alt="Plume 2">
+  </div>
 
-    <input type="text" id="answer" placeholder="Entrez votre réponse..." />
-    <button onclick="checkAnswer()">Déverrouiller</button>
+  <p class="text-before">
+    Un seul mot pour décrire ce que font ces deux images...<br>
+  </p>
+  <em>Quel est ce mot?</em>
 
-    <div id="secretContent">
-      <h3>🎁 Surprise débloquée !</h3>
-      <p>Voici ton cadeau :</p>
-      <a href="https://drive.google.com/file/d/14OGaZz9tvb_3uCFn0ulgQSs2Sp9euhy8/view" target="_blank" style="display:inline-block; margin-top:15px; padding:12px 20px; background:#4CAF50; color:white; border-radius:8px; text-decoration:none; font-size:16px;">
-        Voir ton cadeau
-      </a>
+  <input type="text" id="answer" placeholder="Entrez votre réponse...">
+
+  <div class="btn-zone">
+    <button id="unlockBtn">Déverrouiller</button>
+    <div style="position: relative;">
+      <button id="helpBtn">?</button>
+      <div id="tooltip">Indice : c’est un verbe</div>
     </div>
   </div>
 
-  <script>
-    function createConfetti() {
-      const colors = ['#FF3C3C', '#FFD93D', '#3CFF7D', '#3C7DFF', '#FF3CEC'];
-      for (let i = 0; i < 50; i++) {
-        const confetti = document.createElement('div');
-        confetti.classList.add('confetti');
-        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-        confetti.style.left = Math.random() * window.innerWidth + 'px';
-        confetti.style.animationDuration = (2 + Math.random() * 2) + 's';
-        confetti.style.width = confetti.style.height = (5 + Math.random() * 10) + 'px';
-        document.body.appendChild(confetti);
-        setTimeout(() => { confetti.remove(); }, 3000);
-      }
-    }
+  <div id="secretContent">
+    <h3>🎁 Joyeux Noël 🎅 :</h3>
+    <a href="https://drive.google.com/file/d/14OGaZz9tvb_3uCFn0ulgQSs2Sp9euhy8/view" target="_blank"
+       style="display:inline-block; margin-top:15px; padding:12px 20px; background:#4CAF50; color:white; border-radius:8px; text-decoration:none; font-size:16px;">Voir ton cadeau</a>
+  </div>
+</div>
 
-    function createSnowflakes() {
-      for (let i = 0; i < 30; i++) {
-        const snowflake = document.createElement('div');
-        snowflake.classList.add('snowflake');
-        snowflake.innerText = '❄';
-        snowflake.style.left = Math.random() * window.innerWidth + 'px';
-        snowflake.style.fontSize = (12 + Math.random() * 20) + 'px';
-        snowflake.style.animationDuration = (5 + Math.random() * 5) + 's';
-        document.body.appendChild(snowflake);
-        setTimeout(() => { snowflake.remove(); }, 5000);
-      }
-    }
+<img id="santa" src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExcmRqZWg5OHF4YXptMDc5MmkycjVva2dseTN6dWkyamMxZ3V0cDI5dSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/3BkLpzHRvGoqRJewjs/giphy.gif" />
 
-    function createSanta() {
-      const santa = document.createElement('img');
-      santa.src = "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExcmRqZWg5OHF4YXptMDc5MmkycjVva2dseTN6dWkyamMxZ3V0cDI5dSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/3BkLpzHRvGoqRJewjs/giphy.gif"; // GIF local dans le dépôt
-      santa.classList.add('santa');
-      santa.style.transform = "scaleX(-1)"; // effet miroir
-      document.body.appendChild(santa);
-      setTimeout(() => { santa.remove(); }, 6000);
-    }
+<script>
+const clues = [
+  "Indice : c’est un verbe",
+  "Indice : I believe I can fly",
+  "Indice : c’est quelque chose qu’un oiseau sait faire"
+];
+let clueIndex = 0;
 
-    function checkAnswer() {
-      const input = document.getElementById('answer').value.trim().toLowerCase();
-      if (input === 'voler') {
-        document.getElementById('secretContent').style.display = 'block';
-        createConfetti();
-        createSnowflakes();
-        createSanta();
-      } else {
-        alert('Mauvaise réponse ! Essaie encore 😊');
-      }
-    }
-  </script>
+document.getElementById("helpBtn").onclick = () => {
+  const tip = document.getElementById("tooltip");
+  tip.innerText = clues[clueIndex];
+  clueIndex = (clueIndex +1) % clues.length;
+  tip.style.display = "block";
+  setTimeout(()=>tip.style.display="none", 2500);
+};
+
+document.getElementById("unlockBtn").onclick = () => {
+  const answer = document.getElementById("answer").value.trim().toLowerCase();
+  if(answer === "voler"){
+    document.getElementById("secretContent").style.display = "block";
+    launchSanta();
+    createConfetti();
+  } else { alert("Mauvaise réponse TonTon 😊"); }
+};
+
+function launchSanta(){
+  const santa = document.getElementById("santa");
+  santa.style.display = "block";
+  santa.style.animation = "santaRide 6s linear";
+  setTimeout(()=>santa.style.display="none",6000);
+}
+
+// Flocons de neige
+function createSnowflake(){
+  const snow = document.createElement("div");
+  snow.classList.add("snowflake");
+  snow.textContent = "❄";
+  snow.style.left = Math.random()*100+"vw";
+  snow.style.fontSize = 12+Math.random()*20+"px";
+  snow.style.opacity = Math.random();
+  snow.style.animationDuration = 4+Math.random()*6+"s";
+  document.body.appendChild(snow);
+  setTimeout(()=>snow.remove(),10000);
+}
+setInterval(createSnowflake,150);
+
+// Confettis
+function createConfetti(){
+  const colors = ['#FF3C3C', '#FFD93D', '#3CFF7D', '#3C7DFF', '#FF3CEC'];
+  for(let i=0;i<50;i++){
+    const c = document.createElement("div");
+    c.classList.add("confetti");
+    c.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+    c.style.left = Math.random()*100+"vw";
+    c.style.width = c.style.height = (5 + Math.random()*10)+"px";
+    c.style.animationDuration = (2+Math.random()*2)+"s";
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),3000);
+  }
+}
+</script>
+
 </body>
 </html>
